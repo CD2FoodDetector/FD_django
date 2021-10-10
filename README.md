@@ -1,5 +1,5 @@
 #FD_django
-
+================
 ## API
 ### regist_user
 POST http://127.0.0.1:8000/account/regist_user
@@ -25,7 +25,8 @@ example in body :
     "intf_type": 0
 }
 
-###app_login
+### app_login
+
 POST http://127.0.0.1:8000/account/app_login
 
 example in body : 
