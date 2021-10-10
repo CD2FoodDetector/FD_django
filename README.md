@@ -36,3 +36,5 @@ example in body :
     "passwd" : "testuser",
 ...
 }
+
+return : {msg : ["로그인 성공", "ID가 없습니다", "비밀번호가 틀렸습니다"] }
