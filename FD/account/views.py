@@ -18,11 +18,11 @@ class AppLogin(APIView):
         passwd = request.data.get('passwd',"")
         user = User.objects.filter(id=id).first()
         if user is None:
-            return Response(dict(msg="ID가 없습니다."))
+            return Response({"status_code": 2, "msg": "ID가 없습니다."})
         if user.passwd != passwd:
-            return Response(dict(msg="비밀번호가 틀렸습니다."))
+            return Response({"status_code": 3, "msg": "비밀번호가 틀렸습니다."})
         else:
-            return Response(dict(msg="로그인 성공"))
+            return Response({"status_code": 1, "msg": "로그인 성공"})
         #id, pw 비교후 응답
        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
