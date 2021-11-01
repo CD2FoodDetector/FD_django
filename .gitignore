@@ -5,4 +5,4 @@ myvenv/
 __pycache__/
 FD/FD/__pycache__/
 FD/account/__pycahce__/
-*.py[cod]
+*.pyc
