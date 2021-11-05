@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['54.180.154.157', '3.36.103.81', 'fdwas', '127.0.0.1']
 
+
 #rest_framework
 
 REST_FRAMEWORK = {
@@ -73,6 +74,7 @@ from datetime import timedelta
 #     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
 #     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 # }
+
 # Application definition
 
 INSTALLED_APPS = [
