@@ -8,8 +8,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
 #from rest_framework_simplejwt.tokens import RefreshToken
-from tokens import create_token
-from tokens import validate_token
+from .tokens import create_token
+from .tokens import validate_token
 
 class AppLogin(APIView):
     def post(self, request):
