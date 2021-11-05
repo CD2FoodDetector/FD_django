@@ -13,6 +13,3 @@ class UserLoginSerizlizer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id','passwd']
-
-class UserSerializerWithJWT(serializers.ModelSerializer):
-    token = serializers.SerializerMethodField()

@@ -7,7 +7,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
-from rest_framework_simplejwt.tokens import RefreshToken
+#from rest_framework_simplejwt.tokens import RefreshToken
+from tokens import create_token
+from tokens import validate_token
 
 class AppLogin(APIView):
     def post(self, request):
@@ -17,13 +19,14 @@ class AppLogin(APIView):
         id = request.data.get('id',"")
         passwd = request.data.get('passwd',"")
         user = User.objects.filter(id=id).first()
-        refresh = RefreshToken.for_user(user)
+      #  print("============jwt start==============")
+#        refresh = RefreshToken.for_user(user)
         if user is None:
             return Response({"status_code": 2, "msg": "ID가 없습니다."})
         if user.passwd != passwd:
             return Response({"status_code": 3, "msg": "비밀번호가 틀렸습니다."})
         else:
-            return Response({"status_code": 1, "refresh": str(refresh), "access": str(refresh.access_token),"msg": "로그인 성공"})
+            return Response({"status_code": 1, "token": create_token(id),"msg": "로그인 성공"})
         #id, pw 비교후 응답
        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
