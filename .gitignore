@@ -1,3 +1,12 @@
 myvenv/
 .idea/
 
+# Byte-compiled / optimized / DLL files
+
+__pycache__/
+
+*.py[cod]
+
+
+
+#출처: https://24hours-beginner.tistory.com/102 [365일 24시간 초보]
