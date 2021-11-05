@@ -1,6 +1,8 @@
-#FD_django
+# FD_django
+
 ================
 ## API
+
 ### regist_user
 POST http://127.0.0.1:8000/account/regist_user
 
@@ -37,4 +39,4 @@ example in body :
 ...
 }
 
-return : {msg : ["로그인 성공", "ID가 없습니다", "비밀번호가 틀렸습니다"] }
+return : {status_code : '1', msg : ["로그인 성공", "ID가 없습니다", "비밀번호가 틀렸습니다"] }
