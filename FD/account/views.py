@@ -46,6 +46,7 @@ class RegistUser(APIView):
 class ProfileMeal(APIView):
     def post(self, request):
         token = request.data.get('token', "")
+        id = request.data.get('id',"")
         ret = validate_token(token)
         if ret == True:
             imgs_queryset = Meal.objects.filter(user_id=id)
