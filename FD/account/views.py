@@ -45,10 +45,17 @@ class RegistUser(APIView):
 
 class ProfileMeal(APIView):
     def post(self, request):
-        id = request.data.get('id', "")
-        imgs_queryset = Meal.objects.filter(user_id=id)
-        imgs = []
-        for m in imgs_queryset:
-            imgs.append(m.image_name)
-        print(imgs)        
-        return Response({"img": imgs})
+        token = request.data.get('token', "")
+        id = request.data.get('id',"")
+        ret = validate_token(token)
+        if ret == True:
+            imgs_queryset = Meal.objects.filter(user_id=id)
+            imgs = []
+            for m in imgs_queryset:
+                imgs.append(m.image_name)
+            print(imgs)
+            return Response({"img": imgs})
+        elif ret == "expiredSignature":
+            return Response({"msg": "token expired"})
+        elif ret == "invalid":
+            return Response({"msg": "invalid token"})

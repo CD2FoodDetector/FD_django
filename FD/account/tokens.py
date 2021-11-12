@@ -12,8 +12,8 @@ def validate_token(token):
     try:
         jwt.decode(token, SECRET_PRE, algorithms='HS256')
     except jwt.ExpiredSignatureError:
-        return False
+        return "expiredSignature"
     except jwt.InvalidTokenError:
-        return False
+        return "invalid"
     else:
         return True
