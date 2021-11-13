@@ -54,6 +54,9 @@ POST /account/app_login
 ### profile_meal
 해당 사용자가 올린 식단 이미지 리스트
 #### request
+```http
+POST /account/profile_meal
+```
 | Name | Description |
 | ---- | ----------- |
 | `token` | JWT |
@@ -66,6 +69,9 @@ POST /account/app_login
 ### community_meal
 특정 목표코드를 가진 사용자가 올린 식단 이미지 리스트
 #### request
+```http
+POST /account/community_meal
+```
 | Name | Description |
 | ---- | ----------- |
 | `token` | JWT |
