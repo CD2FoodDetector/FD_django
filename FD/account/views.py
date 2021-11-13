@@ -54,8 +54,33 @@ class ProfileMeal(APIView):
             for m in imgs_queryset:
                 imgs.append(m.image_name)
             print(imgs)
-            return Response({"img": imgs})
+            return Response({"img": imgs, "status_code": 1})
         elif ret == "expiredSignature":
-            return Response({"msg": "token expired"})
+            return Response({"msg": "token expired", "status_code": 2})
         elif ret == "invalid":
-            return Response({"msg": "invalid token"})
+            return Response({"msg": "invalid token", "status_code": 3})
+        
+        
+class CommunityImg(APIView):
+    def post(self, request):
+        token = request.data.get('token', "")
+        gcode_ = request.data.get('gcode',"")
+        
+        ret = validate_token(token)
+        if ret == True:
+            users = User.objects.filter(gcode=gcode_)
+            for user in users:
+                print(user.id)
+                imgs_queryset = Meal.objects.filter(user_id=user.id)
+            imgs = []
+            try:
+                for m in imgs_queryset:
+                    imgs.append(m.image_name)
+            except:
+                print("imgs_queryset is empty")
+            print(imgs)
+            return Response({"img": imgs, "status_code": 1})
+        elif ret == "expiredSignature":
+            return Response({"msg": "token expired", "status_code": 2})
+        elif ret == "invalid":
+            return Response({"msg": "invalid token", "status_code": 3})
