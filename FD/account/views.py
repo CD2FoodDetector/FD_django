@@ -71,3 +71,17 @@ class CommunityImg(APIView):
             return Response({"msg": "token expired", "status_code": 2})
         elif ret == "invalid":
             return Response({"msg": "invalid token", "status_code": 3})
+        
+
+class Detect(APIView):
+    def post(self, request):
+        token = request.data.get('token', "")
+        
+        
+        ret = validate_token(token)
+        if ret == True:
+            pass
+        elif ret == "expiredSignature":
+            pass
+        elif ret == "invalid":
+            pass
