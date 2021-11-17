@@ -10,6 +10,9 @@ from django.http import Http404
 import json
 from .tokens import create_token, validate_token
 
+from account.yolov5.detect import run
+
+
 class AppLogin(APIView):
     def post(self, request):
         id = request.data.get('id',"")
@@ -76,12 +79,14 @@ class CommunityImg(APIView):
 class Detect(APIView):
     def post(self, request):
         token = request.data.get('token', "")
-        
+        img_name = request.data.get('img_name', "")  # ex. 1.jpg
+        img_path = "http://3.36.103.81/images/" + img_name  # nginx server path
         
         ret = validate_token(token)
         if ret == True:
-            pass
+            result = run(imgsz=416, conf_thres=0.2, source=img_path) # yolo5.detect.run
+            return Response({"status_code": 1, "result": result})
         elif ret == "expiredSignature":
-            pass
+            return Response({"msg": "token expired", "status_code": 2})
         elif ret == "invalid":
-            pass
+            return Response({"msg": "invalid token", "status_code": 3})
