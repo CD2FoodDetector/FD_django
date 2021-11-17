@@ -26,10 +26,10 @@ ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 from models.experimental import attempt_load
 from utils.datasets import IMG_FORMATS, VID_FORMATS, LoadImages, LoadStreams
 from utils.general import (LOGGER, apply_classifier, check_file, check_img_size, check_imshow, check_requirements,
-                           check_suffix, colorstr, increment_path, non_max_suppression, print_args, save_one_box,
-                           scale_coords, strip_optimizer, xyxy2xywh)
+                           check_suffix, colorstr, increment_path, non_max_suppression, print_args,
+                           scale_coords, strip_optimizer, xyxy2xywh) # save_one_box,
 from utils.plots import Annotator, colors
-from utils.torch_utils import load_classifier, select_device, time_sync
+from utils.torch_utils import select_device, time_sync # load_classifier
 
 
 @torch.no_grad()
@@ -64,6 +64,7 @@ def run(weights=ROOT / 'best.pt',  # model.pt path(s)
     is_file = Path(source).suffix[1:] in (IMG_FORMATS + VID_FORMATS)
     is_url = source.lower().startswith(('rtsp://', 'rtmp://', 'http://', 'https://'))
     webcam = source.isnumeric() or source.endswith('.txt') or (is_url and not is_file)
+    result = []
     if is_url and is_file:
         source = check_file(source)  # download
 
@@ -163,6 +164,9 @@ def run(weights=ROOT / 'best.pt',  # model.pt path(s)
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
+                    result.append([xyxy, conf, cls])
+                    
+                    """
                     if save_txt:  # Write to file
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                         line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
@@ -173,13 +177,10 @@ def run(weights=ROOT / 'best.pt',  # model.pt path(s)
                         c = int(cls)  # integer class
                         label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
                         annotator.box_label(xyxy, label, color=colors(c, True))
-                        if save_crop:
-                            save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
-
-            # Print time (inference-only)
-            LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s)')
+                    """
 
             # Stream results
+            """
             im0 = annotator.result()
             if view_img:
                 cv2.imshow(str(p), im0)
@@ -204,14 +205,13 @@ def run(weights=ROOT / 'best.pt',  # model.pt path(s)
                         vid_writer[i] = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                     vid_writer[i].write(im0)
 
-    # Print results
-    t = tuple(x / seen * 1E3 for x in dt)  # speeds per image
-    LOGGER.info(f'Speed: %.1fms pre-process, %.1fms inference, %.1fms NMS per image at shape {(1, 3, *imgsz)}' % t)
     if save_txt or save_img:
         s = f"\n{len(list(save_dir.glob('labels/*.txt')))} labels saved to {save_dir / 'labels'}" if save_txt else ''
-        LOGGER.info(f"Results saved to {colorstr('bold', save_dir)}{s}")
+        """
     if update:
         strip_optimizer(weights)  # update model (to fix SourceChangeWarning)
+        
+    return result
 
 
 def parse_opt():
