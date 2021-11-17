@@ -1,10 +1,11 @@
 myvenv/
 .idea/
+FD/account/yolov5/runs/
 
 # Byte-compiled / optimized / DLL files
 
 __pycache__/
-FD/FD/__pycache__/
+FD/FD/__pycache__/*.pyc
 FD/account/__pycache__/
 *.pyc
 
