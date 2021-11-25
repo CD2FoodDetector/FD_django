@@ -347,6 +347,7 @@ def check_file(file, suffix=''):
         file = Path(urllib.parse.unquote(file).split('?')[0]).name  # '%2F' to '/', split https://url.com/file.txt?auth
         if Path(file).is_file():
             #print(f'Found {url} locally at {file}')  # file already exists
+            pass
         else:
             #print(f'Downloading {url} to {file}...')
             torch.hub.download_url_to_file(url, file)
