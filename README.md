@@ -47,7 +47,7 @@ POST /account/app_login
 
 #### response
 `
-{'status_code' : '1', 'token' : '---token---', 'msg' : ["로그인 성공", "ID가 없습니다", "비밀번호가 틀렸습니다"] }
+{'status_code' : 1, 'token' : '---token---', 'msg' : ["로그인 성공", "ID가 없습니다", "비밀번호가 틀렸습니다"] }
 `
 
 ***
@@ -63,7 +63,7 @@ POST /account/profile_meal
 | `id` | 사용자 아이디(ex. user0001) |
 
 #### response
-`{'status_code': '1', 'img': 이미지 리스트}`
+`{'status_code': 1, 'img': 이미지 리스트}`
 
 ***
 ### community_meal
@@ -78,4 +78,20 @@ POST /account/community_meal
 | `gcode` | 목표코드(ex. 1231) |
 
 #### response
-`{'status_code': '1', 'img': 이미지 리스트}`
+`{'status_code': 1, 'img': 이미지 리스트}`
+
+***
+### detect
+이미지명을 보내면, 해당 식단 이미지에 포함된 음식 정보(class, 좌표(x1,y1,x2,y2))를 반환
+#### request
+```http
+POST /account/detect
+```
+| Name | Description |
+| ---- | ----------- |
+| `token` | JWT |
+| `img_name` | 이미지 파일명(ex. user0001_0000001.jpg) |
+
+#### response
+`{'status_code': 1, 'result': array(class, 좌표)}`
+
