@@ -90,3 +90,18 @@ class Detect(APIView):
             return Response({"msg": "token expired", "status_code": 2})
         elif ret == "invalid":
             return Response({"msg": "invalid token", "status_code": 3})
+
+class AddLikes(APIView):
+    def post(self,request):
+        token = request.data.get('token', "")
+        meal_id = request.data.get('meal_id',"")
+        user_id = request.data.get('id',"")
+
+        ret = validate_token(token)
+        if ret == True:
+            meal = Meal.objects.filter(id=meal_id).first()
+
+        elif ret == "expiredSignature":
+            return Response({"msg": "token expired", "status_code": 2})
+        elif ret == "invalid":
+            return Response({"msg": "invalid token", "status_code": 3})
