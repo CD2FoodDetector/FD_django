@@ -1,5 +1,5 @@
 #from django.shortcuts import render
-from .models import User, Meal, Food
+from .models import *
 from .serializers import *
 # API view
 from rest_framework.views import APIView
@@ -120,7 +120,7 @@ class FoodNutrition(APIView):
     def post(self, request):
         id = request.data.get('id',"")
         food = Food.objects.filter(id=id).first()
-        size = request.data.get('size',"")
+        size = float(request.data.get('size',""))
         size_unit = request.data.get('size_unit',"")
         if food is None:
             return Response({"status_code": 2, "msg": "음식 DB에 없습니다."})
@@ -128,5 +128,15 @@ class FoodNutrition(APIView):
             name = food.food_name
             serializer = FoodNutritionSerizlizer(food)
             for key,value in serializer.data.items():
-                serializer.data[key] = value/size
+                serializer.data[key] = float(value)/size
             return Response({"nutrition":serializer.data,"id": id,"name":name, "status_code": 1})
+
+
+class MealAdd(APIView):
+    def post(self, request):
+       serializer = MealSerizlizer(data = request.data)
+       if serializer.is_valid():
+           serializer.save()
+           return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
