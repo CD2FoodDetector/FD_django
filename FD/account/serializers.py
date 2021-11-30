@@ -1,5 +1,6 @@
-from .models import User, Likes
+from .models import User, Likes, Food
 from rest_framework import serializers
+import datetime
 
 class UserRegistSerizlizer(serializers.ModelSerializer):
     class Meta:
@@ -7,13 +8,13 @@ class UserRegistSerizlizer(serializers.ModelSerializer):
         fields = '__all__'
 
 class LikeSerizlizer(serializers.ModelSerializer):
+    log_time = datetime.datetime.now()
     class Meta:
         model = Likes
         fields = '__all__'
 
-
-
-class UserLoginSerizlizer(serializers.ModelSerializer):
+class FoodNutritionSerizlizer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['id','passwd']
+        model = Food
+        fields = '__all__'
+        exclude = ['id','food_name']

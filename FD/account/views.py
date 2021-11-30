@@ -1,6 +1,6 @@
 #from django.shortcuts import render
-from .models import User, Meal
-from .serializers import UserRegistSerizlizer
+from .models import User, Meal, Food
+from .serializers import *
 # API view
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -100,8 +100,33 @@ class AddLikes(APIView):
         ret = validate_token(token)
         if ret == True:
             meal = Meal.objects.filter(id=meal_id).first()
+            user = User.objects.filter(id=user_id).first()
+            if meal is None or user is None:
+                return Response({"msg": "id error", "status_code": 4})
+            serializer = LikeSerizlizer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"msg": "success", "status_code": 1})
+
+            return Response({"msg": "serializer fail", "status_code": 5})
+
 
         elif ret == "expiredSignature":
             return Response({"msg": "token expired", "status_code": 2})
         elif ret == "invalid":
             return Response({"msg": "invalid token", "status_code": 3})
+
+class FoodNutrition(APIView):
+    def post(self, request):
+        id = request.data.get('id',"")
+        food = Food.objects.filter(id=id).first()
+        size = request.data.get('size',"")
+        size_unit = request.data.get('size_unit',"")
+        if food is None:
+            return Response({"status_code": 2, "msg": "음식 DB에 없습니다."})
+        else:
+            name = food.food_name
+            serializer = FoodNutritionSerizlizer(food)
+            for key,value in serializer.data.items():
+                serializer.data[key] = value/size
+            return Response({"nutrition":serializer.data,"id": id,"name":name, "status_code": 1})
