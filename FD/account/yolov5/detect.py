@@ -49,6 +49,17 @@ def run(weights=ROOT / 'best.pt',  # model.pt path(s)
     device = select_device(device)
     half &= device.type != 'cpu'  # half precision only supported on CUDA
 
+    # Read label.csv
+    f = open(str(ROOT) + "/label.csv", 'r')
+    label = []
+    while True:
+        l = f.readline()
+        if not l:
+            break
+        label.append(l.split(','))
+        
+    f.close()
+    
     # Load model
     w = str(weights[0] if isinstance(weights, list) else weights)
     suffix, suffixes = Path(w).suffix.lower(), ['.pt', '.onnx', '.tflite', '.pb', '']
@@ -95,7 +106,7 @@ def run(weights=ROOT / 'best.pt',  # model.pt path(s)
                 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
-                    result.append([xyxy, conf, cls])
+                    result.append([xyxy, conf, label[int(cls)][0], label[int(cls)][1]])
                       
     os.remove(source)
     return result
