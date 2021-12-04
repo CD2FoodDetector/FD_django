@@ -97,7 +97,7 @@ POST /account/detect
 
 ***
 ### user_date_info
-유저 아이디와 날짜를 보내면, 해당 날짜의 유저 식단 정보(칼로리/탄단지/사진명)를 반환
+유저 아이디와 날짜를 보내면, 해당 날짜의 유저 식단 정보(칼로리/탄단지/사진명) & 유저의 목표 칼로리 탄단지 정보 반환
 #### request
 ```http
 POST /account/user_date_info
@@ -118,9 +118,13 @@ POST /account/user_date_info
             "protein_total": 20.0,
             "image_name": "user0001_0000001.jpg"
         },
-       ...
+        ...
     ],
-    "infoNum": # of info
+    "infoNum": (# of info),
+    "user_calorie": 0.0,
+    "user_carbo": -1.0,
+    "user_fat": -1.0,
+    "user_protein": -1.0
 }
 
 ```
