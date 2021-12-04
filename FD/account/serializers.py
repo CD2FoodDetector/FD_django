@@ -9,7 +9,7 @@ class UserRegistSerizlizer(serializers.ModelSerializer):
         fields = '__all__'
 
 class MealSerizlizer(serializers.ModelSerializer):
-    id = random.randint(0,1<<32-1)
+    id = random.randint(3,1<<32-1)
     class Meta:
         model = Meal
         fields = '__all__'

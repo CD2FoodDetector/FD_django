@@ -95,3 +95,32 @@ POST /account/detect
 #### response
 `{'status_code': 1, 'result': array(class, 좌표)}`
 
+***
+### user_date_info
+유저 아이디와 날짜를 보내면, 해당 날짜의 유저 식단 정보(칼로리/탄단지/사진명)를 반환
+#### request
+```http
+POST /account/user_date_info
+```
+| Name | Description |
+| ---- | ----------- |
+| `id` | user id |
+| `date` | 날짜(yyyy-mm-dd) |
+
+#### response
+```
+{
+    "infoList": [
+        {
+            "calories_total": 450.0,
+            "carbo_total": 30.0,
+            "fat_total": 10.0,
+            "protein_total": 20.0,
+            "image_name": "user0001_0000001.jpg"
+        },
+       ...
+    ],
+    "infoNum": # of info
+}
+
+```
