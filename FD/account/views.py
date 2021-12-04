@@ -40,10 +40,17 @@ class ProfileMeal(APIView):
     def post(self, request):
         token = request.data.get('token', "")
         id = request.data.get('id',"")
+        date = request.data.get('date', "") # 211204 추가 - 특정 날짜에 올린 사진 반환 (date필드 없으면 모든 날짜)
         ret = validate_token(token)
         if ret == True:
-            imgs_queryset = Meal.objects.filter(user_id=id)
             imgs = []
+            
+            if date: # date가 주어지는 경우 (ex. yyyy-mm-dd )
+                y, m, d = date.split("-")
+                imgs_queryset = Meal.objects.filter(user_id=id, log_time__date=datetime.date(int(y), int(m), int(d)))
+            else:   # date 주어지지 않는 경우 - 모든 날짜
+                imgs_queryset = Meal.objects.filter(user_id=id)
+            
             for m in imgs_queryset:
                 imgs.append(m.image_name)
             return Response({"img": imgs, "status_code": 1})
