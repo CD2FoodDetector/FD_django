@@ -52,7 +52,7 @@ POST /account/app_login
 
 ***
 ### profile_meal
-해당 사용자가 올린 식단 이미지 리스트
+(특정 날짜에) 해당 사용자가 올린 식단 이미지 리스트
 #### request
 ```http
 POST /account/profile_meal
@@ -60,7 +60,8 @@ POST /account/profile_meal
 | Name | Description |
 | ---- | ----------- |
 | `token` | JWT |
-| `id` | 사용자 아이디(ex. user0001) |
+| `id` | 사용자 아이디(ex. user0002) |
+| `date` | 날짜 (ex. '2021-10-16' (string) |
 
 #### response
 `{'status_code': 1, 'img': 이미지 리스트}`
