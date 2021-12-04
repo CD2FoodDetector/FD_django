@@ -61,11 +61,16 @@ class CommunityImg(APIView):
         ret = validate_token(token)
         if ret == True:
             users = User.objects.filter(gcode=gcode_)
-            for user in users:
-                imgs_queryset = Meal.objects.filter(user_id=user.id)
-            imgs = []
+            imgs_list = [] # Meal object의 리스트
+            for user in users: # 해당 gcode를 갖는 유저에 대해
+                imgs_queryset = Meal.objects.filter(user_id=user.id) # 그 유저가 올린 식단을 리스트에 추가
+                for e in list(imgs_queryset):
+                    imgs_list.append(e)
+            
+            imgs_list.sort(key=lambda x: x.log_time)
+            imgs = [] # 최종 반환할 이미지 리스트
             try:
-                for m in imgs_queryset:
+                for m in imgs_list:
                     imgs.append(m.image_name)
             except:
                 pass
