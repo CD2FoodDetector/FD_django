@@ -120,7 +120,7 @@ POST /account/user_date_info
         },
        ...
     ],
-    "infoNum": 6
+    "infoNum": # of info
 }
 
 ```
