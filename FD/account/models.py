@@ -54,14 +54,18 @@ class Include(models.Model):
 
 class Likes(models.Model):
     id = models.OneToOneField('User', models.CASCADE, db_column='id', primary_key=True)
-    meal = models.ForeignKey('Meal', models.CASCADE, related_name = 'likes_meal')
-    meal_user = models.ForeignKey('Meal', models.CASCADE, related_name = 'likes_mealUser')
+    #meal = models.ForeignKey('Meal', models.CASCADE, related_name = 'likes_meal')
+    #meal_user = models.ForeignKey('Meal', models.CASCADE, related_name = 'likes_mealUser')
+
+    meal = models.ForeignKey('Meal', models.CASCADE, related_name='meal_id')
+    meal_user = models.ForeignKey('Meal', models.CASCADE, related_name='meal_user_id')
     log_time = models.DateTimeField()
 
     class Meta:
         managed = False
         db_table = 'likes'
         unique_together = (('id', 'meal', 'meal_user'),)
+
 
 
 class Meal(models.Model):

@@ -12,6 +12,6 @@ urlpatterns = [
     url('food_nutrition', views.FoodNutrition.as_view(), name='food_nutrition'),
     url('add_likes', views.AddLikes.as_view(), name='add_like'),
     url('meal_add', views.MealAdd.as_view(), name='meal_add'),
-    url('user_date_info', views.UserDateInfo.as_view(), name='user_date_info')
-
+    url('user_date_info', views.UserDateInfo.as_view(), name='user_date_info'),
+    url('like', views.Like.as_view(), name='like')
 ]
