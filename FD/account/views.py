@@ -1,17 +1,17 @@
 #from django.shortcuts import render
 from .models import *
 from .serializers import *
+
 # API view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.http import Http404
 
-import json
 from .tokens import create_token, validate_token
 
 from account.yolov5.detect import run
 
+import datetime
 
 class AppLogin(APIView):
     def post(self, request):
@@ -81,7 +81,7 @@ class Detect(APIView):
         token = request.data.get('token', "")
         img_name = request.data.get('img_name', "")  # ex. 1.jpg
         img_path = "http://3.36.103.81/images/" + img_name  # nginx server path
-        
+
         ret = validate_token(token)
         if ret == True:
             result = run(imgsz=416, conf_thres=0.2, source=img_path) # yolo5.detect.run
@@ -90,6 +90,7 @@ class Detect(APIView):
             return Response({"msg": "token expired", "status_code": 2})
         elif ret == "invalid":
             return Response({"msg": "invalid token", "status_code": 3})
+
 
 class AddLikes(APIView):
     def post(self,request):
@@ -170,3 +171,33 @@ class UserDateInfo(APIView):
         print("infoList : ")
         print(infoList)
         return Response({"infoList" :infoList, "infoNum": len(infoList)})
+        
+
+class Like(APIView):
+    def post(self, request):
+        token = request.data.get('token', "")
+        uid = request.data.get('id', "")
+        meal = request.data.get('meal_id', "")
+        meal_user = request.data.get('meal_user_id', "")
+        
+        
+        ret = validate_token(token)
+        if ret == True:
+            logtime = str(datetime.datetime.now())
+            #id = User.objects.filter(id=uid).first()
+            #muid = User.objects.filter(id=meal_user).first()
+            #meal = Meal.objects.filter(id=meal, user=muid).first()
+            id = User.objects.get(id=uid)
+            muid = User.objects.get(id=meal_user)
+            meal = Meal.objects.get(id=meal, user=muid)
+            
+            new_like = Likes(id=id, meal=meal, meal_user=meal, log_time=logtime)
+            #new_like = Likes(id=id, meal=meal.id, meal_user=meal.user, log_time=logtime)
+            print(new_like)
+            #Likes.objects.create(id=id.id, meal=meal.id, meal_user=meal.user, log_time=logtime)
+            new_like.save()
+            return Response({"status_code": 1})
+        elif ret == "expiredSignature":
+            return Response({"msg": "token expired", "status_code": 2})
+        elif ret == "invalid":
+            return Response({"msg": "invalid token", "status_code": 3})
