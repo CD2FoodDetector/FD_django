@@ -1,6 +1,7 @@
 #from django.shortcuts import render
-from .models import User, Meal, Likes
-from .serializers import UserRegistSerizlizer
+from .models import *
+from .serializers import *
+
 # API view
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -89,6 +90,87 @@ class Detect(APIView):
             return Response({"msg": "token expired", "status_code": 2})
         elif ret == "invalid":
             return Response({"msg": "invalid token", "status_code": 3})
+
+
+class AddLikes(APIView):
+    def post(self,request):
+        token = request.data.get('token', "")
+        meal_id = request.data.get('meal',"")
+        meal_user_id = request.data.get('meal_user_id',"")
+        like_user_id = request.data.get('id', "")
+        ret = validate_token(token)
+        if ret == True:
+            meal = Meal.objects.filter(id= meal_id, user = meal_user_id).first()
+            user = User.objects.filter(id=like_user_id).first()
+            if meal is None or user is None:
+                return Response({"msg": "id error", "status_code": 4})
+            #print(request.data)
+            serializer = LikeSerizlizer(data=request.data)
+            print(serializer)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"msg": "success", "status_code": 1})
+
+            return Response({"data": serializer.errors, "status_code": 5})
+
+
+        elif ret == "expiredSignature":
+            return Response({"msg": "token expired", "status_code": 2})
+        elif ret == "invalid":
+            return Response({"msg": "invalid token", "status_code": 3})
+        return Response({"msg": "unknown error", "status_code": 6})
+
+class FoodNutrition(APIView):
+    def post(self, request):
+        id = request.data.get('id',"")
+        food = Food.objects.filter(id=id).first()
+        size = float(request.data.get('size',""))
+        size_unit = request.data.get('size_unit',"")
+        if food is None:
+            return Response({"status_code": 2, "msg": "음식 DB에 없습니다."})
+        else:
+            name = food.food_name
+            serializer = FoodNutritionSerizlizer(food)
+            for key,value in serializer.data.items():
+                serializer.data[key] = float(value)/size
+            return Response({"nutrition":serializer.data,"id": id,"name":name, "status_code": 1})
+
+
+class MealAdd(APIView):
+    def post(self, request):
+        # 밀 등록
+       serializer = MealSerizlizer(data = request.data)
+       if serializer.is_valid():
+           serializer.save()
+           return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserDateInfo(APIView):
+    def post(self, request):
+        #date form : yyyy-mm-dd
+        target_date = request.data.get('date', "")
+        user_id = request.data.get('id', "")
+
+        # 로그인을 했으므로 딱히 user id check x
+
+        meals = Meal.objects.filter(user = user_id, log_time__date = target_date)\
+            .order_by('log_time')
+        infoList = []
+        for meal in meals:
+            print(meal)
+            info = {}
+            info['calories_total'] = meal.calories_total
+            info['carbo_total'] = meal.carbo_total
+            info['fat_total'] = meal.fat_total
+            info['protein_total'] = meal.protein_total
+            info['image_name'] = meal.image_name
+            print(info)
+            infoList.append(info)
+        print("infoList : ")
+        print(infoList)
+        return Response({"infoList" :infoList, "infoNum": len(infoList)})
         
 
 class Like(APIView):
