@@ -104,9 +104,9 @@ class AddLikes(APIView):
             user = User.objects.filter(id=like_user_id).first()
             if meal is None or user is None:
                 return Response({"msg": "id error", "status_code": 4})
-            #print(request.data)
+
             serializer = LikeSerizlizer(data=request.data)
-            print(serializer)
+
             if serializer.is_valid():
                 serializer.save()
                 return Response({"msg": "success", "status_code": 1})
@@ -159,19 +159,25 @@ class UserDateInfo(APIView):
             .order_by('log_time')
         infoList = []
         for meal in meals:
-            print(meal)
+
             info = {}
             info['calories_total'] = meal.calories_total
             info['carbo_total'] = meal.carbo_total
             info['fat_total'] = meal.fat_total
             info['protein_total'] = meal.protein_total
             info['image_name'] = meal.image_name
-            print(info)
+
             infoList.append(info)
-        print("infoList : ")
-        print(infoList)
-        return Response({"infoList" :infoList, "infoNum": len(infoList)})
-        
+        res = {"infoList" :infoList, "infoNum": len(infoList)}
+
+        #목표 칼로리 탄단지
+        user = User.objects.filter(id = user_id).first()
+        res['user_calorie'] = user.calorie
+        res['user_carbo'] = user.carbohydrate
+        res['user_fat'] = user.fat
+        res['user_protein'] = user.protein
+
+        return Response(res)
 
 class Like(APIView):
     def post(self, request):
