@@ -99,11 +99,12 @@ class Detect(APIView):
             results = run(imgsz=416, conf_thres=0.2, source=img_path) # yolo5.detect.run
             new_result = []
             for result in results:
-                tmp = []
-                tmp.extend(result[0])
-                tmp.extend(result[1:4])
-                
-                new_result.append(tmp)
+                food = dict()
+                food["coordinate"] = list(map(float, result[0]))
+                food["p"] = float(result[1])
+                food["food_id"] = result[2]
+                food["food_name"] = result[3]
+                new_result.append(food)
             return Response({"status_code": 1, "result": new_result})
         elif ret == "expiredSignature":
             return Response({"msg": "token expired", "status_code": 2})
