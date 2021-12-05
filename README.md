@@ -64,7 +64,7 @@ POST /account/profile_meal
 | `date` | 날짜 (ex. '2021-10-16' (string) |
 
 #### response
-`{'status_code': 1, 'img': 이미지 리스트}`
+`{'status_code': 1, 'img': 이미지 리스트, 'datetime': 각 이미지 업로드 시간 리스트}`
 
 ***
 ### community_meal
