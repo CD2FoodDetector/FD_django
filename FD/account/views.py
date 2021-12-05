@@ -100,8 +100,10 @@ class Detect(APIView):
             new_result = []
             for result in results:
                 tmp = []
+                result[0] = list(map(str, result[0]))
                 tmp.extend(result[0])
-                tmp.extend(result[1:4])
+                tmp.append(str(result[1]))
+                tmp.extend(result[2:4])
                 
                 new_result.append(tmp)
             return Response({"status_code": 1, "result": new_result})
