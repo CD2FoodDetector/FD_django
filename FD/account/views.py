@@ -52,6 +52,8 @@ class ProfileMeal(APIView):
             else:   # date 주어지지 않는 경우 - 모든 날짜
                 imgs_queryset = Meal.objects.filter(user_id=id)
             
+            imgs_queryset = list(imgs_queryset)
+            imgs_queryset.sort(key=lambda x: x.log_time)
             for m in imgs_queryset:
                 imgs.append(m.image_name)
                 dt.append(m.log_time)
