@@ -87,12 +87,17 @@ class CommunityImg(APIView):
             
             imgs_list.sort(key=lambda x: x.log_time)
             imgs = [] # 최종 반환할 이미지 리스트
+            dt = [] # 시간
+            user_id = [] # 사용자 아이디
             try:
                 for m in imgs_list:
+                    dt.append(str(m.log_time)[:-9])
+                    user_id.append(m.user_id)
                     imgs.append(m.image_name)
+                print(dt, user_id, imgs)
             except:
                 pass
-            return Response({"img": imgs, "status_code": 1})
+            return Response({"img": imgs, "status_code": 1, "user_id": user_id, "datetime": dt})
         elif ret == "expiredSignature":
             return Response({"msg": "token expired", "status_code": 2})
         elif ret == "invalid":
