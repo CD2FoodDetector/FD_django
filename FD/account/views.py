@@ -96,8 +96,15 @@ class Detect(APIView):
 
         ret = validate_token(token)
         if ret == True:
-            result = run(imgsz=416, conf_thres=0.2, source=img_path) # yolo5.detect.run
-            return Response({"status_code": 1, "result": result})
+            results = run(imgsz=416, conf_thres=0.2, source=img_path) # yolo5.detect.run
+            new_result = []
+            for result in results:
+                tmp = []
+                tmp.extend(result[0])
+                tmp.extend(result[1:4])
+                
+                new_result.append(tmp)
+            return Response({"status_code": 1, "result": new_result})
         elif ret == "expiredSignature":
             return Response({"msg": "token expired", "status_code": 2})
         elif ret == "invalid":
@@ -177,7 +184,7 @@ class UserDateInfo(APIView):
             info['carbo_total'] = meal.carbo_total
             info['fat_total'] = meal.fat_total
             info['protein_total'] = meal.protein_total
-            info['image_name'] = meal.image_name
+            #info['image_name'] = meal.image_name
 
             infoList.append(info)
         res = {"infoList" :infoList, "infoNum": len(infoList)}
