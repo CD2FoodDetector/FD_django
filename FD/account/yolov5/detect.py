@@ -112,5 +112,5 @@ def run(weights=ROOT / 'best.pt',  # model.pt path(s)
                     result.append([xyxy, conf, label[int(cls)][0], label[int(cls)][1]])
         del pred
     del dataset
-    os.remove(source)
+    #os.remove(source)
     return result
