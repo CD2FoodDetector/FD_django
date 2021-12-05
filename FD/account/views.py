@@ -56,7 +56,13 @@ class ProfileMeal(APIView):
             imgs_queryset.sort(key=lambda x: x.log_time)
             for m in imgs_queryset:
                 imgs.append(m.image_name)
-                dt.append(m.log_time)
+                hour = int(str(m.log_time)[11:13])
+                if hour < 10:
+                    dt.append(0) # 아침
+                elif hour < 14:
+                    dt.append(1) # 점심
+                else:
+                    dt.append(2) # 저녁
                 
             return Response({"datetime": dt, "img": imgs, "status_code": 1})
         elif ret == "expiredSignature":
