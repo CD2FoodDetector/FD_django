@@ -9,6 +9,7 @@ Usage:
 import os
 import sys
 from pathlib import Path
+import gc
 
 import torch
 
@@ -42,6 +43,7 @@ def run(weights=ROOT / 'best.pt',  # model.pt path(s)
     is_file = Path(source).suffix[1:] in (IMG_FORMATS + VID_FORMATS)
     is_url = source.lower().startswith(('rtsp://', 'rtmp://', 'http://', 'https://'))
     result = []
+    gc.collect()
     if is_url and is_file:
         source = check_file(source)  # download
 
@@ -93,7 +95,8 @@ def run(weights=ROOT / 'best.pt',  # model.pt path(s)
         # Inference
         if pt:
             pred = model(img, augment=augment, visualize=visualize)[0]
-
+        del model
+        
         # NMS
         pred = non_max_suppression(pred, conf_thres, iou_thres, classes, agnostic_nms, max_det=max_det)
 
@@ -107,6 +110,7 @@ def run(weights=ROOT / 'best.pt',  # model.pt path(s)
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
                     result.append([xyxy, conf, label[int(cls)][0], label[int(cls)][1]])
-                      
+        del pred
+    del dataset
     os.remove(source)
     return result

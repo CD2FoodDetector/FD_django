@@ -44,6 +44,7 @@ class ProfileMeal(APIView):
         ret = validate_token(token)
         if ret == True:
             imgs = []
+            dt = [] # datetime
             
             if date: # date가 주어지는 경우 (ex. yyyy-mm-dd )
                 y, m, d = date.split("-")
@@ -53,7 +54,9 @@ class ProfileMeal(APIView):
             
             for m in imgs_queryset:
                 imgs.append(m.image_name)
-            return Response({"img": imgs, "status_code": 1})
+                dt.append(m.log_time)
+                
+            return Response({"datetime": dt, "img": imgs, "status_code": 1})
         elif ret == "expiredSignature":
             return Response({"msg": "token expired", "status_code": 2})
         elif ret == "invalid":
