@@ -154,9 +154,10 @@ class FoodNutrition(APIView):
         else:
             name = food.food_name
             serializer = FoodNutritionSerizlizer(food)
+            nu = []
             for key,value in serializer.data.items():
-                serializer.data[key] = float(value)/size
-            return Response({"nutrition":serializer.data,"id": id,"name":name, "status_code": 1})
+                nu.append({"key":key,"value": float(value)*size})
+            return Response({"nutrition":nu,"id": id,"name":name, "status_code": 1})
 
 
 class MealAdd(APIView):
