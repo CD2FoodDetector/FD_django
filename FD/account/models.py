@@ -29,7 +29,7 @@ class Food(models.Model):
     protein = models.DecimalField(max_digits=5, decimal_places=2)
     fat = models.DecimalField(max_digits=5, decimal_places=2)
     sugar = models.DecimalField(max_digits=5, decimal_places=2)
-    salt = models.DecimalField(max_digits=5, decimal_places=2)
+    salt = models.DecimalField(max_digits=7, decimal_places=2)
     saturated_fat = models.DecimalField(max_digits=5, decimal_places=2)
 
     class Meta:
