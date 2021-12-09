@@ -128,5 +128,33 @@ POST /account/user_date_info
     "user_fat": -1.0,
     "user_protein": -1.0
 }
-
 ```
+***
+### food_nutrition
+음식 ID와 음식양을 보내면, 음식 양에 따른 영양정보 배열과 음식명, 음식 ID를 반환한다.
+#### request
+```http
+POST /account/food_nutrition
+```
+| Name | Description |
+| ---- | ----------- |
+| `id` | 음식 id |
+| 'size' | 음식 양 (ex.1.5인분 -> 1.5) |
+| 'size_unit' | 음식 양 기준 (ex. 인분) |
+
+#### response
+```
+{
+    "nutrition": [
+        {
+            "key": "calorie",
+            "value": 315.0
+        },
+       ...
+    ],
+    "id": 음식 id,
+    "name": 음식 명,
+    "status_code": 1
+}
+```
+
