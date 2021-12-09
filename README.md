@@ -157,4 +157,23 @@ POST /account/food_nutrition
     "status_code": 1
 }
 ```
+***
+### user_gcode_update
+유저 아이디와 새로운 gcode를 보내면 업데이트함.
+#### request
+```http
+POST /account/user_gcode_update
+```
+| Name | Description |
+| ---- | ----------- |
+| `id` | user id |
+| `gcode` | 새로운 gcode |
 
+#### response
+```
+{
+    "gcode": 업데이트된 gcode 값,
+    "status_code": 1
+}
+
+```

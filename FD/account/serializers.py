@@ -14,13 +14,6 @@ class MealSerizlizer(serializers.ModelSerializer):
         model = Meal
         fields = '__all__'
 
-
-class LikeSerizlizer(serializers.ModelSerializer):
-    log_time = datetime.datetime.now()
-    class Meta:
-        model = Likes
-        fields = '__all__'
-
 class FoodNutritionSerizlizer(serializers.ModelSerializer):
     class Meta:
         model = Food
