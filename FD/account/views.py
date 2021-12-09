@@ -112,34 +112,6 @@ class Detect(APIView):
             return Response({"msg": "invalid token", "status_code": 3})
 
 
-class AddLikes(APIView):
-    def post(self,request):
-        token = request.data.get('token', "")
-        meal_id = request.data.get('meal',"")
-        meal_user_id = request.data.get('meal_user_id',"")
-        like_user_id = request.data.get('id', "")
-        ret = validate_token(token)
-        if ret == True:
-            meal = Meal.objects.filter(id= meal_id, user = meal_user_id).first()
-            user = User.objects.filter(id=like_user_id).first()
-            if meal is None or user is None:
-                return Response({"msg": "id error", "status_code": 4})
-
-            serializer = LikeSerizlizer(data=request.data)
-
-            if serializer.is_valid():
-                serializer.save()
-                return Response({"msg": "success", "status_code": 1})
-
-            return Response({"data": serializer.errors, "status_code": 5})
-
-
-        elif ret == "expiredSignature":
-            return Response({"msg": "token expired", "status_code": 2})
-        elif ret == "invalid":
-            return Response({"msg": "invalid token", "status_code": 3})
-        return Response({"msg": "unknown error", "status_code": 6})
-
 class FoodNutrition(APIView):
     def post(self, request):
         id = request.data.get('id',"")
@@ -228,3 +200,15 @@ class Like(APIView):
             return Response({"msg": "token expired", "status_code": 2})
         elif ret == "invalid":
             return Response({"msg": "invalid token", "status_code": 3})
+
+
+class UserGcodeUpdate(APIView):
+    def post(self, request):
+        id = request.data.get('id', "")
+        new_gcode = request.data.get('gcode',"")
+
+        user = User.objects.filter(id=id).first()
+        user.gcode = new_gcode
+        user.save()
+
+        return Response({"gcode": user.gcode, "status_code": 1})
