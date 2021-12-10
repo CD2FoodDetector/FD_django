@@ -165,7 +165,8 @@ class MealAdd(APIView):
         saturated_fat_total = request.data.get('saturated_fat_total', "")
 
         image_name = request.data.get('image_name', "")
-
+        if calories_total == 0 or calories_total is None:
+            return Response({"status_code": 2, "msg": "Meal is meaningless"})
         new_meal = Meal(id=meal_id, user=user, calories_total=calories_total, carbo_total = carbo_total, protein_total = protein_total, fat_total = fat_total, sugar_total = sugar_total, salt_total = salt_total, saturated_fat_total = saturated_fat_total, log_time = log_time,image_name = image_name, public_avail = 0)
         new_meal.save()
 
