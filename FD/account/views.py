@@ -147,7 +147,7 @@ class FoodNutrition(APIView):
 
 class MealAdd(APIView):
     # Meal
-    # require : totalNutritionList(key, value), image_name
+    # require : totalNutritions, image_name
     def post(self, request):
         user_id = request.data.get('id',"")
         #meal_id 결정
@@ -165,7 +165,8 @@ class MealAdd(APIView):
         saturated_fat_total = request.data.get('saturated_fat_total', "")
 
         image_name = request.data.get('image_name', "")
-
+        if calories_total == 0 or calories_total is None:
+            return Response({"status_code": 2, "msg": "Meal is meaningless"})
         new_meal = Meal(id=meal_id, user=user, calories_total=calories_total, carbo_total = carbo_total, protein_total = protein_total, fat_total = fat_total, sugar_total = sugar_total, salt_total = salt_total, saturated_fat_total = saturated_fat_total, log_time = log_time,image_name = image_name, public_avail = 0)
         new_meal.save()
 
@@ -244,3 +245,24 @@ class UserGcodeUpdate(APIView):
         user.save()
 
         return Response({"gcode": user.gcode, "status_code": 1})
+
+
+class SearchFood(APIView):
+    def post(self, request):
+        name = request.data.get('name',"")
+
+        #이름 검색
+        foods = Food.objects.filter(food_name__contains = name)
+
+        #음식 id, name, 영양정보 리턴
+        res = []
+        for food in foods:
+            food_id = food.id
+            food_name = food.food_name
+            serializer = FoodNutritionSerizlizer(food)
+            nu = []
+            for key, value in serializer.data.items():
+                nu.append({"key": key, "value": float(value)})
+            res.append({"nutrition": nu, "id": food_id, "name": food_name})
+
+        return Response({"result": res, "resultNum": len(res)})

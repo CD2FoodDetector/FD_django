@@ -13,5 +13,6 @@ urlpatterns = [
     url('meal_add', views.MealAdd.as_view(), name='meal_add'),
     url('user_date_info', views.UserDateInfo.as_view(), name='user_date_info'),
     url('like', views.Like.as_view(), name='like'),
-    url('user_gcode_update',views.UserGcodeUpdate.as_view(), name='user_gcode_update')
+    url('user_gcode_update',views.UserGcodeUpdate.as_view(), name='user_gcode_update'),
+    url('search_food',views.SearchFood.as_view(), name='search_food')
 ]
