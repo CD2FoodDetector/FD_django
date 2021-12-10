@@ -245,3 +245,24 @@ class UserGcodeUpdate(APIView):
         user.save()
 
         return Response({"gcode": user.gcode, "status_code": 1})
+
+
+class SearchFood(APIView):
+    def post(self, request):
+        name = request.data.get('name',"")
+
+        #이름 검색
+        foods = Food.objects.filter(food_name__contains = name)
+
+        #음식 id, name, 영양정보 리턴
+        res = []
+        for food in foods:
+            food_id = food.id
+            food_name = food.food_name
+            serializer = FoodNutritionSerizlizer(food)
+            nu = []
+            for key, value in serializer.data.items():
+                nu.append({"key": key, "value": float(value)})
+            res.append({"nutrition": nu, "id": food_id, "name": food_name})
+
+        return Response({"result": res, "resultNum": len(res)})
