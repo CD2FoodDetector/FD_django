@@ -146,14 +146,30 @@ class FoodNutrition(APIView):
 
 
 class MealAdd(APIView):
+    # Meal
+    # require : totalNutritionList(key, value), image_name
     def post(self, request):
-        # 밀 등록
-       serializer = MealSerizlizer(data = request.data)
-       if serializer.is_valid():
-           serializer.save()
-           return Response(serializer.data, status=status.HTTP_201_CREATED)
+        user_id = request.data.get('id',"")
+        #meal_id 결정
+        meal_id = Meal.objects.filter(user=user_id).count()+1
+        user = User.objects.get(id=user_id)
+        #log_time
+        log_time = str(datetime.datetime.now())
 
-       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        calories_total = request.data.get('calories_total',"")
+        carbo_total = request.data.get('carbo_total', "")
+        protein_total = request.data.get('protein_total', "")
+        fat_total = request.data.get('fat_total', "")
+        sugar_total = request.data.get('sugar_total', "")
+        salt_total = request.data.get('salt_total', "")
+        saturated_fat_total = request.data.get('saturated_fat_total', "")
+
+        image_name = request.data.get('image_name', "")
+
+        new_meal = Meal(id=meal_id, user=user, calories_total=calories_total, carbo_total = carbo_total, protein_total = protein_total, fat_total = fat_total, sugar_total = sugar_total, salt_total = salt_total, saturated_fat_total = saturated_fat_total, log_time = log_time,image_name = image_name, public_avail = 0)
+        new_meal.save()
+
+        return Response({"status_code":1, "meal_id": new_meal.id})
 
 
 class UserDateInfo(APIView):
