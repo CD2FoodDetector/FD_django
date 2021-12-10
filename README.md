@@ -177,3 +177,45 @@ POST /account/user_gcode_update
 }
 
 ```
+***
+### meal_add
+새로운 식단을 저장
+#### request
+```http
+POST /account/meal_add
+```
+| Name | Description |
+| ---- | ----------- |
+| `id` | user id |
+| `calorie_total` | 식단의 전체 칼로리 |
+| `carbo_total` | 식단의 전체 탄수화물 |
+| `protein_total` | 식단의 전체 단백질 |
+| `fat_total` | 식단의 전체 지방 |
+| `sugar_total` | 식단의 전체 당류 |
+| `salt_total` | 식단의 전체 나트륨 |
+| `saturated_fat_total` | 식단의 전체 포화지방 |
+
+#### response
+```
+{
+    "meal_id": 새로운 식단의 id,
+    "status_code": 성공시 1, 실패시 2
+}
+
+```
+***
+### search_food
+검색할 음식의 이름을 보내면, 그 이름을 포함한 음식 리스트를 반환
+#### request
+```http
+POST /account/search_food
+```
+| Name | Description |
+| ---- | ----------- |
+| 'name' | '음식 이름' |
+
+#### response
+```
+추가 예정
+
+```

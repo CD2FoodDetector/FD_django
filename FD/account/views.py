@@ -147,7 +147,7 @@ class FoodNutrition(APIView):
 
 class MealAdd(APIView):
     # Meal
-    # require : totalNutritionList(key, value), image_name
+    # require : totalNutritions, image_name
     def post(self, request):
         user_id = request.data.get('id',"")
         #meal_id 결정
