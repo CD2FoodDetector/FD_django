@@ -76,7 +76,7 @@ class Meal(models.Model):
     protein_total = models.DecimalField(max_digits=5, decimal_places=2)
     fat_total = models.DecimalField(max_digits=5, decimal_places=2)
     sugar_total = models.DecimalField(max_digits=5, decimal_places=2)
-    salt_total = models.DecimalField(max_digits=5, decimal_places=2)
+    salt_total = models.DecimalField(max_digits=7, decimal_places=2)
     saturated_fat_total = models.DecimalField(max_digits=5, decimal_places=2)
     log_time = models.DateTimeField()
     image_name = models.CharField(max_length=255, blank=True, null=True)
