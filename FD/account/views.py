@@ -85,7 +85,7 @@ class CommunityImg(APIView):
                 for e in list(imgs_queryset):
                     imgs_list.append(e)
             
-            imgs_list.sort(key=lambda x: x.log_time)
+            imgs_list.sort(key=lambda x: -x.log_time)
             imgs = [] # 최종 반환할 이미지 리스트
             dt = [] # 시간
             user_id = [] # 사용자 아이디
